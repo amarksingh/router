@@ -4,7 +4,8 @@ const HttpException = require('@ostro/http/exception/httpException');
 const RateLimiter = require('@ostro/cache/rateLimiter');
 const Unlimited = require('@ostro/cache/rateLimiting/unlimited');
 const InteractsWithTime = require('@ostro/support/interactsWithTime');
-const { get_class_name } = require("@ostro/support/function");
+const { get_class_name, is_string, is_null, is_numeric, str_contains, is_callable, collect, md5, sha1 } = require("@ostro/support/function");
+const Arr = require('@ostro/support/array');
 const Response = require('@ostro/http/response');
 
 class ThrottleRequests extends InteractsWithTime {
@@ -22,7 +23,7 @@ class ThrottleRequests extends InteractsWithTime {
         this.$maxAttempts = $maxAttempts;
         this.$decayMinutes = $decayMinutes;
         this.$prefix = $prefix;
-        this.$limiter = new RateLimiter(this.$app.cache);
+        this.$limiter = new RateLimiter(this.$app ? this.$app.cache : null);
     }
 
     static using($name) {
@@ -41,10 +42,10 @@ class ThrottleRequests extends InteractsWithTime {
         const $limiter = is_string(this.$maxAttempts) ? this.$limiter.limiter(this.$maxAttempts) : null;
         if (
             !is_null($limiter)) {
-            return this.handleRequestUsingNamedLimiter(request, response, next, this.$maxAttempts, this.$limiter);
+            return this.handleRequestUsingNamedLimiter(request, response, next, this.$maxAttempts, $limiter);
         }
 
-        this.handleRequest(
+        return this.handleRequest(
             request,
             response,
             next,
@@ -60,7 +61,7 @@ class ThrottleRequests extends InteractsWithTime {
     }
 
     handleRequestUsingNamedLimiter(request, response, next, $limiterName, $limiter) {
-        $limiterResponse = $limiter(request);
+        const $limiterResponse = $limiter(request);
 
         if ($limiterResponse instanceof Response) {
             return $limiterResponse;
@@ -72,9 +73,9 @@ class ThrottleRequests extends InteractsWithTime {
             request,
             response,
             next,
-            collect(Arr.wrap($limiterResponse)).map(function ($limit) {
+            collect(Arr.wrap($limiterResponse)).map(($limit) => {
                 return {
-                    'key': this.$shouldHashKeys ? md5($limiterName.$limit.key) : $limiterName + ':' + $limit.key,
+                    'key': this.constructor.$shouldHashKeys ? md5($limiterName + ':' + $limit.key) : $limiterName + ':' + $limit.key,
                     'maxAttempts': $limit.maxAttempts,
                     'decayMinutes': $limit.decayMinutes,
                     'responseCallback': $limit.responseCallback,
@@ -187,7 +188,7 @@ class ThrottleRequests extends InteractsWithTime {
     }
 
     formatIdentifier($value) {
-        return this.$shouldHashKeys ? sha1($value) : $value;
+        return this.constructor.$shouldHashKeys ? sha1($value) : $value;
     }
 
 

@@ -1,5 +1,8 @@
-const GeneratorCommand = require('@ostro/console/generatorCommand')
-const InvalidArgumentException = require('@ostro/support/exceptions/invalidArgumentException')
+require('@ostro/support/helpers');
+const path = require('path');
+const GeneratorCommand = require('@ostro/console/generatorCommand');
+const InvalidArgumentException = require('@ostro/support/exceptions/invalidArgumentException');
+const { trim, class_basename } = require('@ostro/support/function');
 class ControllerMakeCommand extends GeneratorCommand {
 
     $signature = 'make:controller';

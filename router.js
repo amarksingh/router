@@ -83,7 +83,7 @@ class Route {
     }
 
     view($uri, $view, $data = {}, $status = 200, $headers = {}) {
-        return this.match(['GET', 'HEAD'], $uri, require('@ostro/router/viewController'))
+        return this.match(['GET', 'HEAD'], $uri, require('./viewController'))
             .setDefaults({
                 'view': $view,
                 'data': $data,
@@ -142,7 +142,7 @@ class Route {
         callback.call(inst, inst);
     }
 
-    setDefaults(defaults = {}) {
+    setDefaults(defaults) {
         this.$stack.defaults = {
             ...this.$stack.defaults,
             ...defaults
@@ -179,6 +179,13 @@ class GroupRoute extends Macroable {
         this.opt.domain = opt.domain || old.domain;
     }
     group(opt, callback) {
+        if (typeof opt == 'string') {
+            callback = require(opt);
+            opt = {};
+        } else if (typeof opt == 'function') {
+            callback = opt;
+            opt = {};
+        }
         if (typeof this.opt == 'function') {
             this.opt = {};
         }
@@ -216,12 +223,10 @@ class Router extends Macroable.extend(RouterContract) {
         if (typeof middleware == 'string' && middleware.includes(':')) {
             let splitedMiddleware = middleware.split(':');
             middleware = splitedMiddleware[0];
-            if (typeof splitedMiddleware[1] == 'string') {
-                params = splitedMiddleware[1].split(',');
-            }
+            params = splitedMiddleware[1].split(',');
         }
 
-        if (typeof middleware === 'function') {
+        if (typeof middleware === 'function' || (typeof middleware === 'object' && middleware !== null)) {
             return this.resolveMiddleware(middleware, params);
         }
 
@@ -232,19 +237,17 @@ class Router extends Macroable.extend(RouterContract) {
         if (!this[kMiddlewares]['named'][middleware])
             throw new MethodNotAvailable('middleware [{' + middleware + '}] is not available');
 
-        if (!middlewares[middlewareName]) {
-            let namedMiddleware = this[kMiddlewares]['named'][middleware];
-            if (!Array.isArray(namedMiddleware)) {
+        let namedMiddleware = this[kMiddlewares]['named'][middleware];
+        if (!Array.isArray(namedMiddleware)) {
 
-                middlewares[middlewareName] = this.resolveMiddleware(namedMiddleware, params);
+            middlewares[middlewareName] = this.resolveMiddleware(namedMiddleware, params);
 
-            } else {
-                middlewares[middlewareName] = this[kMiddlewares]['named'][middleware].map(handler => {
-                    if (handler instanceof Array)
-                        return handler.reduce((acc, val) => acc.concat(val), [])
-                    return handler
-                }).map(handler => this.resolveMiddleware(handler, params)).filter(fn => fn);
-            }
+        } else {
+            middlewares[middlewareName] = this[kMiddlewares]['named'][middleware].map(handler => {
+                if (handler instanceof Array)
+                    return handler.reduce((acc, val) => acc.concat(val), [])
+                return handler
+            }).map(handler => this.resolveMiddleware(handler, params)).filter(fn => fn);
         }
         return middlewares[middlewareName];
     }
@@ -254,7 +257,7 @@ class Router extends Macroable.extend(RouterContract) {
             handler.prototype.$app = this.$app;
             handler = new handler(...params);
         }
-        if (typeof handler == 'object' && !Array.isArray(handler)) {
+        if (typeof handler == 'object' && handler !== null && !Array.isArray(handler)) {
             if (typeof handler.handle == 'function') {
                 handler.handle = handler.handle.bind(handler);
             }
@@ -361,7 +364,7 @@ class Router extends Macroable.extend(RouterContract) {
     }
 
     handle() {
-        const defaultTermicateMiddleWare = {};
+        const defaultTerminateMiddleware = {};
         this[kLayers] = stacks.filter(stack => stack.handle).map(stack => this.createLayer(stack));
         let self = this;
         let middlewares = [function urlHander({ request }, next) {
@@ -386,26 +389,24 @@ class Router extends Macroable.extend(RouterContract) {
             } else {
                 return next(new PageNotFoundException());
             }
-            if (!defaultTermicateMiddleWare[layer.$regexp]) {
+            if (!defaultTerminateMiddleware[layer.$regexp]) {
                 const terminateMiddlewares = defaultTerminateMiddleWares.concat(layer.terminate);
                 const errorHandlerTerminate = terminateMiddlewares.find(handle => handle.length == 3);
-                defaultTermicateMiddleWare[layer.$regexp] =
-                    defaultTermicateMiddleWare[layer.$regexp] = {
-                        terminate: compose(terminateMiddlewares.filter(handle => handle.length < 3)),
-                        error: function (err) {
-                            if (err) {
-                                errorHandlerTerminate(err, ctx)
-                            }
+                defaultTerminateMiddleware[layer.$regexp] = {
+                    terminate: compose(terminateMiddlewares.filter(handle => handle.length < 3)),
+                    error: function (err) {
+                        if (err && errorHandlerTerminate) {
+                            errorHandlerTerminate(err, ctx)
                         }
-                    };
+                    }
+                };
             }
-            defaultTermicateMiddleWare[layer.$regexp].terminate(ctx, defaultTermicateMiddleWare[layer.$regexp].error);
-
-
+            defaultTerminateMiddleware[layer.$regexp].terminate(ctx, defaultTerminateMiddleware[layer.$regexp].error);
+            return next();
         })
         let exceptionHandler = new ExceptionHandler();
-        let exceptionHandle = exceptionHandler.handle.bind(ExceptionHandler);
-        let exceptionTerminate = exceptionHandler.terminate.bind(ExceptionHandler);
+        let exceptionHandle = exceptionHandler.handle.bind(exceptionHandler);
+        let exceptionTerminate = exceptionHandler.terminate.bind(exceptionHandler);
         Object.defineProperty(exceptionHandler, "name", {
             value: ExceptionHandler.name
         });
@@ -469,4 +470,21 @@ class Router extends Macroable.extend(RouterContract) {
     }
 
 }
+Router.clear = function() {
+    stacks.length = 0;
+    for (let key of Object.keys(middlewares)) {
+        delete middlewares[key];
+    }
+    for (let key of Object.keys(controllers)) {
+        delete controllers[key];
+    }
+};
+
+Router.getStacks = function() {
+    return stacks;
+};
+
+Router.Route = Route;
+Router.GroupRoute = GroupRoute;
+
 module.exports = Router

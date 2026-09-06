@@ -4,7 +4,7 @@
   "description": "Router module for OstroJS",
   "main": "router.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "NODE_PATH=../foundation/node_modules npx jest --coverage"
   },
   "dependencies": {
     "@ostro/support": "^1.0.11",

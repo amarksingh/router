@@ -1,4 +1,6 @@
-const GeneratorCommand = require('@ostro/console/generatorCommand')
+const path = require('path');
+const GeneratorCommand = require('@ostro/console/generatorCommand');
+const { trim } = require('@ostro/support/function');
 
 class MiddlewareMakeCommand extends GeneratorCommand {
 

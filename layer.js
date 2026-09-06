@@ -3,11 +3,10 @@ const { decode_param } = require('./utils')
 
 const hasOwnProperty = Object.prototype.hasOwnProperty;
 
-class Layer {
-    constructor(stack, opts = {}) {
-        if (!(this instanceof Layer)) {
-            return new Layer(path, opts);
-        }
+function Layer(stack, opts = {}) {
+    if (!(this instanceof Layer)) {
+        return new Layer(stack, opts);
+    }
 
         this.handle = stack.handle;
         this.terminate = stack.terminate;
@@ -20,38 +19,38 @@ class Layer {
         this.$params = this.$keys;
         this.$regexp.fast_star = stack.url === '*';
         this.$regexp.fast_slash = stack.url === '/' && opts.end === false;
+}
+
+Layer.prototype.handle_error = function (error, ctx, next) {
+    var fn = this.handle;
+
+    if (fn.length !== 3) {
+        return next(error);
     }
 
-    handle_error(error, ctx, next) {
-        var fn = this.handle;
+    try {
+        return fn(error, ctx, next);
+    } catch (err) {
+        return next(err);
+    }
+};
 
-        if (fn.length !== 3) {
-            return next(error);
-        }
+Layer.prototype.handle_request = function (ctx, next) {
+    var fn = this.handle;
+    ctx.request.params = this.$params;
 
-        try {
-            return fn(error, ctx, next);
-        } catch (err) {
-            return next(err);
-        }
+    if (fn.length > 2) {
+        return next();
     }
 
-    handle_request(ctx, next) {
-        var fn = this.handle;
-        ctx.request.params = this.$params;
-
-        if (fn.length > 2) {
-            return next();
-        }
-
-        try {
-            return fn(ctx, next);
-        } catch (err) {
-            return next(err);
-        }
+    try {
+        return fn(ctx, next);
+    } catch (err) {
+        return next(err);
     }
+};
 
-    match(path) {
+Layer.prototype.match = function (path) {
         var match;
 
         if (path != null) {
@@ -96,7 +95,7 @@ class Layer {
         }
 
         return true;
-    }
-}
+    };
 
 module.exports = Layer;
+
