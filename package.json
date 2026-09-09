@@ -4,7 +4,7 @@
   "description": "Router module for OstroJS",
   "main": "router.js",
   "scripts": {
-    "test": "NODE_PATH=../foundation/node_modules npx jest --coverage"
+    "test": "npx c8 npx jest"
   },
   "dependencies": {
     "@ostro/support": "^1.0.11",
