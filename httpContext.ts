@@ -1,30 +1,35 @@
-const { Macroable } = require('@ostro/support/macro')
+import { Macroable } from '@ostro/support/macro';
 
+/**
+ * Context object passed to routing handlers and middleware.
+ */
 class HttpRouterContext extends Macroable {
+    public readonly request!: any;
+    public readonly response!: any;
+    public next?: Function;
+
     /**
-     * constructor method.
+     * Create a new HttpRouterContext instance.
      *
-     * @param {any} request
-     * @param {any} response
-     * @param {any} next
-     * @returns {any}
+     * @param request - HTTP request instance.
+     * @param response - HTTP response instance.
+     * @param next - Optional next callback function.
      */
-    constructor(request: any, response: any, next: Function) {
-        super()
+    constructor(request: any, response: any, next?: Function) {
+        super();
         Object.defineProperty(this, 'request', {
             value: request,
             enumerable: true,
             configurable: false,
             writable: false
-        })
+        });
         Object.defineProperty(this, 'response', {
             value: response,
             enumerable: true,
             configurable: false,
             writable: false
-        })
+        });
     }
-
 }
 
-module.exports = HttpRouterContext
+export = HttpRouterContext;

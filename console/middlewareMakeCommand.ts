@@ -1,57 +1,55 @@
-const path = require('path');
-const GeneratorCommand = require('@ostro/console/generatorCommand');
-const { trim } = require('@ostro/support/function');
+import path from 'path';
+import GeneratorCommand from '@ostro/console/generatorCommand';
+import { trim } from '@ostro/support/function';
 
+/**
+ * Console command for generating new middleware classes.
+ */
 class MiddlewareMakeCommand extends GeneratorCommand {
-
     /**
-     * $signature property.
-     * @type {any}
+     * The console command name.
      */
-    $signature = 'make:middleware';
+    public $signature: string = 'make:middleware';
 
     /**
-     * $description property.
-     * @type {any}
+     * The console command description.
      */
-    $description =  'Create a new middleware class';
+    public $description: string = 'Create a new middleware class';
 
     /**
-     * $type property.
-     * @type {any}
+     * The type of class being generated.
      */
-    $type =  'Middleware';
+    public $type: string = 'Middleware';
 
     /**
-     * getStub method.
+     * Get the stub file for the generator.
      *
-     * @returns {any}
+     * @returns The resolved stub file path.
      */
-    getStub() {
+    public getStub(): Promise<string> {
         return this.resolveStubPath('/stubs/middleware.stub');
     }
 
     /**
-     * resolveStubPath method.
+     * Resolve the stub path for the generator.
      *
-     * @param {any} stub
-     * @returns {any}
+     * @param $stub - Relative stub path.
+     * @returns The resolved stub path.
      */
-    resolveStubPath($stub: any) {
-        let $customPath = this.$app.basePath(trim($stub, '/'))
-        return this.$file.exists($customPath).then($exists => ($exists ? $customPath : path.join(__dirname, $stub)))
+    public resolveStubPath($stub: string): Promise<string> {
+        const $customPath: string = this.$app.basePath(trim($stub, '/'));
+        return this.$file.exists($customPath).then(($exists: boolean) => ($exists ? $customPath : path.join(__dirname, $stub)));
     }
 
     /**
-     * getDefaultNamespace method.
+     * Get the default namespace for the class.
      *
-     * @param {any} rootNamespace
-     * @returns {any}
+     * @param $rootNamespace - Root application namespace.
+     * @returns The default namespace path.
      */
-    getDefaultNamespace($rootNamespace: any) {
+    public getDefaultNamespace($rootNamespace: string): string {
         return path.join($rootNamespace, 'app', 'http', 'middleware');
     }
-
 }
 
-module.exports = MiddlewareMakeCommand
+export = MiddlewareMakeCommand;

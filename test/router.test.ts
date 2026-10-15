@@ -1,9 +1,9 @@
-const Router = require('../router');
-const PageNotFoundException = require('@ostro/support/exceptions/pageNotFoundException');
-const MethodNotAvailable = require('@ostro/support/exceptions/methodNotAvailable');
-const InvalidRouteExceptions = require('../exceptions/invalidRouteExceptions');
-const InvalidArgumentException = require('@ostro/support/exceptions/invalidArgumentException');
-const path = require('path');
+import Router from '../router';
+import PageNotFoundException from '@ostro/support/exceptions/pageNotFoundException';
+import MethodNotAvailable from '@ostro/support/exceptions/methodNotAvailable';
+import InvalidRouteExceptions from '../exceptions/invalidRouteExceptions';
+import InvalidArgumentException from '@ostro/support/exceptions/invalidArgumentException';
+import path from 'path';
 
 describe('Router & Route & GroupRoute', () => {
     let app;

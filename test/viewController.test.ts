@@ -1,4 +1,4 @@
-const View = require('../viewController');
+import View from '../viewController';
 
 describe('ViewController', () => {
     test('instantiates with defaults and renders view on response', () => {

@@ -1,9 +1,13 @@
+/**
+ * Exception thrown when a requested route cannot be resolved.
+ */
 class InvalidRouteExceptions extends Error {
+    public statusCode: number;
+
     /**
-     * constructor method.
+     * Create a new InvalidRouteExceptions instance.
      *
-     * @param {any} message
-     * @returns {any}
+     * @param message - The error message.
      */
     constructor(message: string) {
         super();
@@ -11,7 +15,7 @@ class InvalidRouteExceptions extends Error {
         this.message = message;
         this.statusCode = 500;
         Error.captureStackTrace(this, this.constructor);
-
     }
 }
-module.exports = InvalidRouteExceptions
+
+export = InvalidRouteExceptions;

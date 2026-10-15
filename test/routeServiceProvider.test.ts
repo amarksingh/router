@@ -1,5 +1,5 @@
-const RouteServiceProvider = require('../routeServiceProvider');
-const Router = require('../router');
+import RouteServiceProvider from '../routeServiceProvider';
+import Router from '../router';
 
 describe('RouteServiceProvider', () => {
     test('registers router singleton and boots service provider', () => {

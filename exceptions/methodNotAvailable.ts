@@ -1,9 +1,13 @@
+/**
+ * Exception thrown when a controller or middleware method is not available.
+ */
 class MethodNotAvailable extends Error {
+    public statusCode: number;
+
     /**
-     * constructor method.
+     * Create a new MethodNotAvailable instance.
      *
-     * @param {any} message
-     * @returns {any}
+     * @param message - The error message.
      */
     constructor(message: string) {
         super();
@@ -11,7 +15,7 @@ class MethodNotAvailable extends Error {
         this.message = message;
         this.statusCode = 500;
         Error.captureStackTrace(this, this.constructor);
-
     }
 }
-module.exports = MethodNotAvailable
+
+export = MethodNotAvailable;

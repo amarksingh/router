@@ -1,22 +1,24 @@
+/**
+ * Exception handler for routing errors and unexpected terminations.
+ */
 class ExceptionHandler {
     /**
-     * handle method.
+     * Handle the given error and render an HTTP response.
      *
-     * @param {any} error
-     * @param {any} { response }
-     * @param {any} next
-     * @returns {any}
+     * @param error - The caught error or exception.
+     * @param context - Context containing response.
+     * @param next - Optional next callback.
      */
-    handle(error: any, { response }: Record<string, any>, next: Function) {
-        let status = 500;
+    public handle(error: any, { response }: Record<string, any>, next?: Function): void {
+        let status: number = 500;
         if (error instanceof Error) {
-            status = error.status || 500;
+            status = (error as any).status || 500;
             error = error.stack;
-        } else if (typeof error == 'object') {
+        } else if (typeof error === 'object') {
             status = error.status || 500;
             error = error;
         }
-        error = process.env['NODE_ENV'] != 'production' ? error : 'Whoops, looks like something went wrong.';
+        error = process.env['NODE_ENV'] !== 'production' ? error : 'Whoops, looks like something went wrong.';
         response.send(`<pre>${error}</pre>`, status);
         if (typeof next === 'function') {
             next();
@@ -24,16 +26,15 @@ class ExceptionHandler {
     }
 
     /**
-     * terminate method.
+     * Terminate the process on fatal error by logging to console.
      *
-     * @param {any} error
-     * @param {any} { response }
-     * @param {any} next
-     * @returns {any}
+     * @param error - The error to log.
+     * @param context - Context containing response.
+     * @param next - Optional next callback.
      */
-    terminate(error: any, { response }: Record<string, any>, next: Function) {
-        console.error(error)
+    public terminate(error: any, { response }: Record<string, any>, next?: Function): void {
+        console.error(error);
     }
 }
 
-module.exports = ExceptionHandler
+export = ExceptionHandler;

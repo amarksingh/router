@@ -1,5 +1,8 @@
+/**
+ * Base Controller class for handling HTTP requests.
+ */
 class Controller {
 
 }
 
-module.exports = Controller
+export = Controller;

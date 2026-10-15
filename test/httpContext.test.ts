@@ -1,4 +1,4 @@
-const HttpRouterContext = require('../httpContext');
+import HttpRouterContext from '../httpContext';
 
 describe('HttpRouterContext', () => {
     test('defines non-writable enumerable request and response', () => {

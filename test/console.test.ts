@@ -1,8 +1,8 @@
-const path = require('path');
-const fs = require('fs');
-const ControllerMakeCommand = require('../console/controllerMakeCommand');
-const MiddlewareMakeCommand = require('../console/middlewareMakeCommand');
-const InvalidArgumentException = require('@ostro/support/exceptions/invalidArgumentException');
+import path from 'path';
+import fs from 'fs';
+import ControllerMakeCommand from '../console/controllerMakeCommand';
+import MiddlewareMakeCommand from '../console/middlewareMakeCommand';
+import InvalidArgumentException from '@ostro/support/exceptions/invalidArgumentException';
 
 describe('Console Make Commands', () => {
     describe('ControllerMakeCommand', () => {

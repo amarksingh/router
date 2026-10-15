@@ -1,4 +1,4 @@
-const { compose, composeWith, decode_param, urlNormalize } = require('../utils');
+import { compose, composeWith, decode_param, urlNormalize } from '../utils';
 
 describe('Router Utils', () => {
     describe('decode_param', () => {

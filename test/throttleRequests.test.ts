@@ -1,8 +1,8 @@
-const ThrottleRequests = require('../middleware/throttleRequests');
-const ThrottleRequestsException = require('@ostro/http/exception/throttleRequestsException');
-const HttpException = require('@ostro/http/exception/httpException');
-const Unlimited = require('@ostro/cache/rateLimiting/unlimited');
-const Response = require('@ostro/http/response');
+import ThrottleRequests from '../middleware/throttleRequests';
+import ThrottleRequestsException from '@ostro/http/exception/throttleRequestsException';
+import HttpException from '@ostro/http/exception/httpException';
+import Unlimited from '@ostro/cache/rateLimiting/unlimited';
+import Response from '@ostro/http/response';
 
 describe('ThrottleRequests Middleware', () => {
     let mockCache;

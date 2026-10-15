@@ -1,43 +1,46 @@
-require('@ostro/support/helpers');
-const path = require('path');
-const GeneratorCommand = require('@ostro/console/generatorCommand');
-const InvalidArgumentException = require('@ostro/support/exceptions/invalidArgumentException');
-const { trim, class_basename } = require('@ostro/support/function');
+import '@ostro/support/helpers';
+import path from 'path';
+import GeneratorCommand from '@ostro/console/generatorCommand';
+import InvalidArgumentException from '@ostro/support/exceptions/invalidArgumentException';
+import { trim, class_basename } from '@ostro/support/function';
+
+/**
+ * Console command for generating new controller classes.
+ */
 class ControllerMakeCommand extends GeneratorCommand {
+    /**
+     * The console command name.
+     */
+    public $signature: string = 'make:controller';
 
     /**
-     * $signature property.
-     * @type {any}
+     * The console command description.
      */
-    $signature = 'make:controller';
+    public $description: string = 'Create a new controller class';
 
     /**
-     * $description property.
-     * @type {any}
+     * The console command options.
      */
-    $description = 'Create a new controller class';
-
-    $options =  [
-            this.createOption('--force', 'Create the class even if the controller already exists'),
-            this.createOption('-m, --model [model]', 'Generate a resource controller for the given model.'),
-            this.createOption('-r, --resource', 'Generate a resource controller class.')
+    public $options: any[] = [
+        this.createOption('--force', 'Create the class even if the controller already exists'),
+        this.createOption('-m, --model [model]', 'Generate a resource controller for the given model.'),
+        this.createOption('-r, --resource', 'Generate a resource controller class.')
     ];
 
     /**
-     * $type property.
-     * @type {any}
+     * The type of class being generated.
      */
-    $type = 'Controller';
+    public $type: string = 'Controller';
 
     /**
-     * getStub method.
+     * Get the stub file for the generator.
      *
-     * @returns {any}
+     * @returns The resolved stub file path.
      */
-    getStub() {
-        let $stub = null;
-        let $type
-        if ($type = this.option('type')) {
+    public getStub(): Promise<string> {
+        let $stub: string | null = null;
+        let $type: string | null;
+        if (($type = this.option('type'))) {
             $stub = `/stubs/controller.${$type}.stub`;
         } else if (this.option('model')) {
             $stub = '/stubs/controller.model.stub';
@@ -51,62 +54,59 @@ class ControllerMakeCommand extends GeneratorCommand {
     }
 
     /**
-     * resolveStubPath method.
+     * Resolve the stub path for the generator.
      *
-     * @param {any} stub
-     * @returns {any}
+     * @param $stub - Stub file name or relative path.
+     * @returns The resolved stub path.
      */
-    resolveStubPath($stub: any) {
-        let $customPath = this.$app.basePath(trim($stub, '/'))
-        return this.$file.exists($customPath).then($exists => ($exists ? $customPath : path.join(__dirname, $stub)))
+    public resolveStubPath($stub: string): Promise<string> {
+        const $customPath: string = this.$app.basePath(trim($stub, '/'));
+        return this.$file.exists($customPath).then(($exists: boolean) => ($exists ? $customPath : path.join(__dirname, $stub)));
     }
 
     /**
-     * getDefaultNamespace method.
+     * Get the default namespace for the class.
      *
-     * @param {any} rootNamespace
-     * @returns {any}
+     * @param $rootNamespace - Root application namespace.
+     * @returns The default namespace path.
      */
-    getDefaultNamespace($rootNamespace: any) {
+    public getDefaultNamespace($rootNamespace: string): string {
         return path.join($rootNamespace, 'app', 'http', 'controllers');
     }
 
     /**
-     * buildClass method.
+     * Build the class with the given name.
      *
-     * @async
-     * @param {any} name
-     * @returns {any}
+     * @param $name - Class name.
+     * @returns The built class content.
      */
-    async buildClass($name: string) {
-
-        let $controllerNamespace = this.getNamespace($name);
-        let $replace = {};
+    public async buildClass($name: string): Promise<string> {
+        let $controllerNamespace: string = this.getNamespace($name);
+        let $replace: Record<string, string> = {};
         if (this.option('model')) {
             $replace = await this.buildModelReplacements($replace);
         }
 
-        return super.buildClass($name).then(content => content.replaceAllArray(Object.keys($replace), Object.values($replace)))
+        return super.buildClass($name).then((content: any) => content.replaceAllArray(Object.keys($replace), Object.values($replace)));
     }
 
     /**
-     * buildModelReplacements method.
+     * Build the model replacement values.
      *
-     * @async
-     * @param {any} replace
-     * @returns {any}
+     * @param $replace - Replacements dictionary.
+     * @returns Updated replacements dictionary.
      */
-    async buildModelReplacements($replace: any) {
-        let $modelClass = this.parseModel(this.option('model'));
+    public async buildModelReplacements($replace: Record<string, string>): Promise<Record<string, string>> {
+        let $modelClass: string = this.parseModel(this.option('model'));
 
-        if (!await this.$file.exists(!$modelClass.endsWith('.js') ? $modelClass+'.js' : $modelClass)) {
+        if (!await this.$file.exists(!$modelClass.endsWith('.js') ? $modelClass + '.js' : $modelClass)) {
             if (await this.confirm(`A ${$modelClass} model does not exist. Do you want to generate it?`, true)) {
                 this.callCommand('make:model', {
                     'name': $modelClass
                 });
             }
         }
-        $modelClass = $modelClass.replace(this.rootNamespace(), '~').replaceAll('\\', '/').trim('/')
+        $modelClass = $modelClass.replace(this.rootNamespace(), '~').replaceAll('\\', '/').trim('/');
         return Object.assign($replace, {
             'DummyFullModelClass': $modelClass,
             '{{ namespacedModel }}': $modelClass,
@@ -114,26 +114,24 @@ class ControllerMakeCommand extends GeneratorCommand {
             'DummyModelClass': class_basename($modelClass),
             '{{ model }}': class_basename($modelClass),
             '{{model}}': class_basename($modelClass),
-            'DummyModelVariable': class_basename($modelClass).ucfirst(),
-            '{{ modelVariable }}': class_basename($modelClass).ucfirst(),
-            '{{modelVariable}}': class_basename($modelClass).ucfirst(),
+            'DummyModelVariable': (class_basename($modelClass) as any).ucfirst(),
+            '{{ modelVariable }}': (class_basename($modelClass) as any).ucfirst(),
+            '{{modelVariable}}': (class_basename($modelClass) as any).ucfirst(),
         });
     }
 
     /**
-     * parseModel method.
+     * Parse the model name and format it.
      *
-     * @param {any} model
-     * @returns {any}
+     * @param $model - Model name option value.
+     * @returns Qualified model name.
      */
-    parseModel($model: any) {
-
-        if($model && typeof $model == 'boolean'){
-            throw new InvalidArgumentException('Invalid model name')
+    public parseModel($model: any): string {
+        if ($model && typeof $model === 'boolean') {
+            throw new InvalidArgumentException('Invalid model name');
         }
         return this.qualifyModel($model);
     }
-
 }
 
-module.exports = ControllerMakeCommand
+export = ControllerMakeCommand;

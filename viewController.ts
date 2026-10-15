@@ -1,12 +1,19 @@
+/**
+ * Controller for rendering views directly from route definitions.
+ */
 class View {
+    public $app: any;
+    public $view: string | undefined;
+    public $data: Record<string, any> | undefined;
+    public $status: number | undefined;
+
     /**
-     * constructor method.
+     * Create a new View controller instance.
      *
-     * @param {any} app
-     * @param {any} defaults
-     * @returns {any}
+     * @param app - Application instance or defaults configuration object.
+     * @param defaults - Defaults configuration object.
      */
-    constructor(app: any, defaults: Record<string, any> = {}) {
+    constructor(app?: any, defaults: Record<string, any> = {}) {
         if ((!defaults || Object.keys(defaults).length === 0) && app && typeof app === 'object' && app.view) {
             defaults = app;
             app = null;
@@ -17,17 +24,15 @@ class View {
         this.$data = defaults.data;
         this.$status = defaults.status;
     }
+
     /**
-     * handle method.
+     * Handle the incoming request by rendering the configured view.
      *
-     * @param {any} { request
-     * @param {any} response
-     * @param {any} next }
-     * @returns {any}
+     * @param context - Context containing request, response, and next.
      */
-    handle({ request, response, next }: Record<string, any>) {
-        response.view(this.$view, this.$data, this.$status)
+    handle({ request, response, next }: Record<string, any>): void {
+        response.view(this.$view, this.$data, this.$status);
     }
 }
 
-module.exports = View
+export = View;

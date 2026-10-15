@@ -1,4 +1,4 @@
-const Layer = require('../layer');
+import Layer from '../layer';
 
 describe('Layer', () => {
     test('instantiates without new keyword', () => {

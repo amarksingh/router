@@ -1,6 +1,6 @@
-const MethodNotAvailable = require('../exceptions/methodNotAvailable');
-const InvalidRouteExceptions = require('../exceptions/invalidRouteExceptions');
-const Controller = require('../controller');
+import MethodNotAvailable from '../exceptions/methodNotAvailable';
+import InvalidRouteExceptions from '../exceptions/invalidRouteExceptions';
+import Controller from '../controller';
 
 describe('Exceptions & Base Controller', () => {
     test('MethodNotAvailable has proper properties', () => {
