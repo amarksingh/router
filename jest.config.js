@@ -26,7 +26,7 @@ module.exports = {
         "^@ostro/cache/(.*)$": "<rootDir>/../cache/$1",
         "^@ostro/cache$": "<rootDir>/../cache",
         "^@ostro/router/(.*)$": "<rootDir>/$1",
-        "^@ostro/router$": "<rootDir>/router.js"
+        "^@ostro/router$": "<rootDir>/router"
     },
     "collectCoverage": true,
     "coverageDirectory": "coverage",
@@ -36,7 +36,7 @@ module.exports = {
         "clover"
     ],
     "collectCoverageFrom": [
-        "<rootDir>/**/*.js",
+        "<rootDir>/**/*.ts",
         "!<rootDir>/node_modules/**",
         "!<rootDir>/test/**",
         "!<rootDir>/coverage/**",
