@@ -1,4 +1,12 @@
 class ExceptionHandler {
+    /**
+     * handle method.
+     *
+     * @param {any} error
+     * @param {any} { response }
+     * @param {any} next
+     * @returns {any}
+     */
     handle(error, { response }, next) {
         let status = 500;
         if (error instanceof Error) {
@@ -15,6 +23,14 @@ class ExceptionHandler {
         }
     }
 
+    /**
+     * terminate method.
+     *
+     * @param {any} error
+     * @param {any} { response }
+     * @param {any} next
+     * @returns {any}
+     */
     terminate(error, { response }, next) {
         console.error(error)
     }

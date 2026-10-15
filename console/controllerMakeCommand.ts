@@ -5,8 +5,16 @@ const InvalidArgumentException = require('@ostro/support/exceptions/invalidArgum
 const { trim, class_basename } = require('@ostro/support/function');
 class ControllerMakeCommand extends GeneratorCommand {
 
+    /**
+     * $signature property.
+     * @type {any}
+     */
     $signature = 'make:controller';
 
+    /**
+     * $description property.
+     * @type {any}
+     */
     $description = 'Create a new controller class';
 
     $options =  [
@@ -15,8 +23,17 @@ class ControllerMakeCommand extends GeneratorCommand {
             this.createOption('-r, --resource', 'Generate a resource controller class.')
     ];
 
+    /**
+     * $type property.
+     * @type {any}
+     */
     $type = 'Controller';
 
+    /**
+     * getStub method.
+     *
+     * @returns {any}
+     */
     getStub() {
         let $stub = null;
         let $type
@@ -33,15 +50,34 @@ class ControllerMakeCommand extends GeneratorCommand {
         return this.resolveStubPath($stub);
     }
 
+    /**
+     * resolveStubPath method.
+     *
+     * @param {any} stub
+     * @returns {any}
+     */
     resolveStubPath($stub) {
         let $customPath = this.$app.basePath(trim($stub, '/'))
         return this.$file.exists($customPath).then($exists => ($exists ? $customPath : path.join(__dirname, $stub)))
     }
 
+    /**
+     * getDefaultNamespace method.
+     *
+     * @param {any} rootNamespace
+     * @returns {any}
+     */
     getDefaultNamespace($rootNamespace) {
         return path.join($rootNamespace, 'app', 'http', 'controllers');
     }
 
+    /**
+     * buildClass method.
+     *
+     * @async
+     * @param {any} name
+     * @returns {any}
+     */
     async buildClass($name) {
 
         let $controllerNamespace = this.getNamespace($name);
@@ -53,6 +89,13 @@ class ControllerMakeCommand extends GeneratorCommand {
         return super.buildClass($name).then(content => content.replaceAllArray(Object.keys($replace), Object.values($replace)))
     }
 
+    /**
+     * buildModelReplacements method.
+     *
+     * @async
+     * @param {any} replace
+     * @returns {any}
+     */
     async buildModelReplacements($replace) {
         let $modelClass = this.parseModel(this.option('model'));
 
@@ -77,6 +120,12 @@ class ControllerMakeCommand extends GeneratorCommand {
         });
     }
 
+    /**
+     * parseModel method.
+     *
+     * @param {any} model
+     * @returns {any}
+     */
     parseModel($model) {
 
         if($model && typeof $model == 'boolean'){

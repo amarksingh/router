@@ -3,6 +3,12 @@ const {
 } = require("array-flatten");
 exports.compose = function compose() {
     var handlers = [];
+    /**
+     * for method.
+     *
+     * @param {any} var _i
+     * @returns {any}
+     */
     for (var _i = 0; _i < arguments.length; _i++) {
         handlers[_i] = arguments[_i];
     }
@@ -13,6 +19,12 @@ exports.compose = function compose() {
 }
 exports.composeWith = function composeWith() {
     var handlers = [];
+    /**
+     * for method.
+     *
+     * @param {any} var _i
+     * @returns {any}
+     */
     for (var _i = 0; _i < arguments.length; _i++) {
         handlers[_i] = arguments[_i];
     }
@@ -27,6 +39,12 @@ exports.composeWith = function composeWith() {
 }
 
 exports.decode_param = function decode_param(val) {
+    /**
+     * if method.
+     *
+     * @param {any} typeof val !
+     * @returns {any}
+     */
     if (typeof val !== 'string' || val.length === 0) {
         return val;
     }
@@ -44,12 +62,24 @@ exports.decode_param = function decode_param(val) {
 }
 exports.urlNormalize = function urlNormalize() {
     var strArray;
+    /**
+     * if method.
+     *
+     * @param {any} typeof arguments[0]
+     * @returns {any}
+     */
     if (typeof arguments[0] === 'object') {
         strArray = arguments[0];
     } else {
         strArray = [].slice.call(arguments);
     }
     var resultArray = [];
+    /**
+     * if method.
+     *
+     * @param {any} strArray.length
+     * @returns {any}
+     */
     if (strArray.length === 0) {
         return '';
     }
@@ -62,6 +92,12 @@ exports.urlNormalize = function urlNormalize() {
         strArray[0] = strArray[0].replace(/^([^/:]+):\/*/, '$1://');
     }
 
+    /**
+     * for method.
+     *
+     * @param {any} var i
+     * @returns {any}
+     */
     for (var i = 0; i < strArray.length; i++) {
         var component = strArray[i];
         if (component === '') {
@@ -76,6 +112,13 @@ exports.urlNormalize = function urlNormalize() {
 
 function generate(handlers) {
     var stack = flatten(handlers);
+    /**
+     * for method.
+     *
+     * @param {any} var _i
+     * @param {any} stack_1
+     * @returns {any}
+     */
     for (var _i = 0, stack_1 = stack; _i < stack_1.length; _i++) {
         var handler = stack_1[_i];
         if (typeof handler !== 'function') {

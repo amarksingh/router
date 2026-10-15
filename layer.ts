@@ -24,6 +24,12 @@ function Layer(stack, opts = {}) {
 Layer.prototype.handle_error = function (error, ctx, next) {
     var fn = this.handle;
 
+    /**
+     * if method.
+     *
+     * @param {any} fn.length !
+     * @returns {any}
+     */
     if (fn.length !== 3) {
         return next(error);
     }
@@ -39,6 +45,12 @@ Layer.prototype.handle_request = function (ctx, next) {
     var fn = this.handle;
     ctx.request.params = this.$params;
 
+    /**
+     * if method.
+     *
+     * @param {any} fn.length > 2
+     * @returns {any}
+     */
     if (fn.length > 2) {
         return next();
     }

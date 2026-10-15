@@ -1,6 +1,14 @@
 const { Macroable } = require('@ostro/support/macro')
 
 class HttpRouterContext extends Macroable {
+    /**
+     * constructor method.
+     *
+     * @param {any} request
+     * @param {any} response
+     * @param {any} next
+     * @returns {any}
+     */
     constructor(request, response, next) {
         super()
         Object.defineProperty(this, 'request', {
