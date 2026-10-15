@@ -368,15 +368,20 @@ class GroupRoute extends Macroable {
     }
 }
 
-class Router extends Macroable.extend(RouterContract) {
+import type { IRouter } from '@ostro/contracts/router/router';
+
+class Router extends Macroable.extend(RouterContract) implements IRouter {
+    $app: Record<string, any>;
+    [kMiddlewares]: { default: any[]; named: Record<string, any> };
+    [kLayers]: any[];
+    [kRegexConfig]: Record<string, any>;
+
     /**
      * constructor method.
      *
-     * @param {any} app
-     * @param {any} regexConfig
-     * @param {any} strict
-     * @param {any} end
-     * @returns {any}
+     * @param {Record<string, any>} app
+     * @param {*} regexConfig
+     * @returns {void}
      */
     constructor($app: Record<string, any> = {}, regexConfig = { sensitive: false, strict: false, end: true }) {
         super();
