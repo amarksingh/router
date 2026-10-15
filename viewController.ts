@@ -6,7 +6,7 @@ class View {
      * @param {any} defaults
      * @returns {any}
      */
-    constructor(app, defaults = {}) {
+    constructor(app: any, defaults: Record<string, any> = {}) {
         if ((!defaults || Object.keys(defaults).length === 0) && app && typeof app === 'object' && app.view) {
             defaults = app;
             app = null;
@@ -25,7 +25,7 @@ class View {
      * @param {any} next }
      * @returns {any}
      */
-    handle({ request, response, next }) {
+    handle({ request, response, next }: Record<string, any>) {
         response.view(this.$view, this.$data, this.$status)
     }
 }

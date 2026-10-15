@@ -31,7 +31,7 @@ class Route {
      * @param {any} opt
      * @returns {any}
      */
-    constructor(opt = {}) {
+    constructor(opt: Record<string, any> = {}) {
         opt = Object.assign({ prefix: '/', suffix: '/', namespace: '', middlewares: [], url: '/', name: '', handle: null, defaults: null }, opt)
 
         this.$currentStack = stacks.push({
@@ -56,7 +56,7 @@ class Route {
      * @param {any} action
      * @returns {any}
      */
-    get($uri, $action = null) {
+    get($uri: any, $action: any = null) {
         return this.addRoute(['GET', 'HEAD'], $uri, $action);
     }
 
@@ -67,7 +67,7 @@ class Route {
      * @param {any} action
      * @returns {any}
      */
-    post($uri, $action = null) {
+    post($uri: any, $action: any = null) {
         return this.addRoute('POST', $uri, $action);
     }
 
@@ -78,7 +78,7 @@ class Route {
      * @param {any} action
      * @returns {any}
      */
-    put($uri, $action = null) {
+    put($uri: any, $action: any = null) {
         return this.addRoute('PUT', $uri, $action);
     }
 
@@ -89,7 +89,7 @@ class Route {
      * @param {any} action
      * @returns {any}
      */
-    patch($uri, $action = null) {
+    patch($uri: any, $action: any = null) {
         return this.addRoute('PATCH', $uri, $action);
     }
 
@@ -100,7 +100,7 @@ class Route {
      * @param {any} action
      * @returns {any}
      */
-    delete($uri, $action = null) {
+    delete($uri: any, $action: any = null) {
         return this.addRoute('DELETE', $uri, $action);
     }
 
@@ -111,7 +111,7 @@ class Route {
      * @param {any} action
      * @returns {any}
      */
-    options($uri, $action = null) {
+    options($uri: any, $action: any = null) {
         return this.addRoute('OPTIONS', $uri, $action);
     }
 
@@ -122,7 +122,7 @@ class Route {
      * @param {any} action
      * @returns {any}
      */
-    any($uri, $action = null) {
+    any($uri: any, $action: any = null) {
         return this.addRoute(this.$verbs, $uri, $action);
     }
 
@@ -134,7 +134,7 @@ class Route {
      * @param {any} status
      * @returns {any}
      */
-    redirect($uri, $destination, $status = 302) {
+    redirect($uri: any, $destination: any, $status: number = 302) {
         return this.any($uri, function ({
             response,
         }) {
@@ -152,7 +152,7 @@ class Route {
      * @param {any} destination
      * @returns {any}
      */
-    permanentRedirect($uri, $destination) {
+    permanentRedirect($uri: any, $destination: any) {
         return this.redirect($uri, $destination, 301);
     }
 
@@ -166,7 +166,7 @@ class Route {
      * @param {any} headers
      * @returns {any}
      */
-    view($uri, $view, $data = {}, $status = 200, $headers = {}) {
+    view($uri: any, $view: any, $data: Record<string, any> = {}, $status: number = 200, $headers: Record<string, any> = {}) {
         return this.match(['GET', 'HEAD'], $uri, require('./viewController'))
             .setDefaults({
                 'view': $view,
@@ -184,7 +184,7 @@ class Route {
      * @param {any} action
      * @returns {any}
      */
-    match($methods, $uri, $action = null) {
+    match($methods: any, $uri: any, $action: any = null) {
         $methods = $methods.map(method => method.toUpperCase());
         return this.addRoute($methods, $uri, $action);
     }
@@ -195,7 +195,7 @@ class Route {
      * @param {any} callback
      * @returns {any}
      */
-    middleware(callback) {
+    middleware(callback: Function) {
         if (Array.isArray(callback))
             this.$stack.middlewares = this.$stack.middlewares.concat(callback);
         else
@@ -209,7 +209,7 @@ class Route {
      * @param {any} prefix
      * @returns {any}
      */
-    prefix(prefix) {
+    prefix(prefix: any) {
         this.$stack.prefix = this.$stack.prefix + prefix;
         return this
     }
@@ -220,7 +220,7 @@ class Route {
      * @param {any} suffix
      * @returns {any}
      */
-    suffix(suffix) {
+    suffix(suffix: any) {
         this.$stack.suffix = this.$stack.suffix + suffix;
         return this
     }
@@ -231,7 +231,7 @@ class Route {
      * @param {any} domain
      * @returns {any}
      */
-    domain(domain) {
+    domain(domain: any) {
         this.$stack.domain = domain;
         return this;
     }
@@ -242,7 +242,7 @@ class Route {
      * @param {any} namespace
      * @returns {any}
      */
-    namespace(namespace) {
+    namespace(namespace: any) {
         this.$stack.namespace = path.join(this.$stack.namespace, (namespace || ''));
         return this;
     }
@@ -253,7 +253,7 @@ class Route {
      * @param {any} name
      * @returns {any}
      */
-    name(name) {
+    name(name: string) {
         this.$stack.name += name;
         return this;
     }
@@ -265,7 +265,7 @@ class Route {
      * @param {any} callback
      * @returns {any}
      */
-    group(opt = {}, callback) {
+    group(opt: Record<string, any> = {}, callback: Function) {
         if (typeof opt == 'string') {
             callback = require(opt);
             opt = {};
@@ -283,7 +283,7 @@ class Route {
      * @param {any} defaults
      * @returns {any}
      */
-    setDefaults(defaults) {
+    setDefaults(defaults: any) {
         this.$stack.defaults = {
             ...this.$stack.defaults,
             ...defaults
@@ -298,7 +298,7 @@ class Route {
      * @param {any} action
      * @returns {any}
      */
-    addRoute($methods, $uri, $action) {
+    addRoute($methods: any, $uri: any, $action: string) {
         this.$stack.url = $uri;
         this.$stack.methods = $methods;
         this.$stack.handle = $action;
@@ -315,7 +315,7 @@ class GroupRoute extends Macroable {
      * @param {any} old
      * @returns {any}
      */
-    constructor(opt = null, old = {}) {
+    constructor(opt: any = null, old: Record<string, any> = {}) {
         super();
 
         if (opt == null && old == null) {
@@ -341,7 +341,7 @@ class GroupRoute extends Macroable {
      * @param {any} callback
      * @returns {any}
      */
-    group(opt, callback) {
+    group(opt: any, callback: Function) {
         if (typeof opt == 'string') {
             callback = require(opt);
             opt = {};
@@ -363,7 +363,7 @@ class GroupRoute extends Macroable {
      * @param {any} method
      * @returns {any}
      */
-    __get(target, method) {
+    __get(target: Record<string, any>, method: string) {
         return this.make(new Route(target.opt), method);
     }
 }
@@ -378,7 +378,7 @@ class Router extends Macroable.extend(RouterContract) {
      * @param {any} end
      * @returns {any}
      */
-    constructor($app = {}, regexConfig = { sensitive: false, strict: false, end: true }) {
+    constructor($app: Record<string, any> = {}, regexConfig = { sensitive: false, strict: false, end: true }) {
         super();
         this.$app = $app;
         this[kMiddlewares] = {
@@ -401,7 +401,7 @@ class Router extends Macroable.extend(RouterContract) {
      * @param {any} middleware
      * @returns {any}
      */
-    getMiddleware(middleware) {
+    getMiddleware(middleware: any) {
         const middlewareName = middleware;
         let params = [];
 
@@ -444,7 +444,7 @@ class Router extends Macroable.extend(RouterContract) {
      * @param {any} params
      * @returns {any}
      */
-    resolveMiddleware(handler, params) {
+    resolveMiddleware(handler: Function, params: Record<string, any>) {
         if (IsClass(handler)) {
             handler.prototype.$app = this.$app;
             handler = new handler(...params);
@@ -468,7 +468,7 @@ class Router extends Macroable.extend(RouterContract) {
      * @param {any} stack
      * @returns {any}
      */
-    createLayer(stack) {
+    createLayer(stack: any) {
         if (typeof stack.handle == 'string') {
             let [controller, callback] = stack.handle.split('::')
             let controllerPath = path.normalize(path.join(path.resolve(stack.namespace), controller))
@@ -530,7 +530,7 @@ class Router extends Macroable.extend(RouterContract) {
      * @param {any} value
      * @returns {any}
      */
-    namedMiddleware(key, value) {
+    namedMiddleware(key: string, value: any) {
         this[kMiddlewares]['named'][key] = value;
     }
 
@@ -540,7 +540,7 @@ class Router extends Macroable.extend(RouterContract) {
      * @param {any} middlewares
      * @returns {any}
      */
-    defaultMiddlewares(middlewares = []) {
+    defaultMiddlewares(middlewares: any[] = []) {
         this[kMiddlewares]['default'] = this[kMiddlewares]['default'].concat(middlewares);
     }
 
@@ -581,7 +581,7 @@ class Router extends Macroable.extend(RouterContract) {
      * @param {any} httpContext
      * @returns {any}
      */
-    httpContextHandler(httpContext) {
+    httpContextHandler(httpContext: any) {
         this.httpContext = httpContext;
     }
 
@@ -667,7 +667,7 @@ class Router extends Macroable.extend(RouterContract) {
      * @param {any} ...params
      * @returns {any}
      */
-    route(name, ...params) {
+    route(name: string, ...params: any[]) {
 
         let currentRoute = this[kLayers].find(layer => (layer.$name == name && name != ''));
         if (!currentRoute) {
@@ -690,7 +690,7 @@ class Router extends Macroable.extend(RouterContract) {
      * @param {any} request
      * @returns {any}
      */
-    currentRoute(request) {
+    currentRoute(request: any) {
         return this[kLayers].find(route => {
             if (route.$domain != undefined && request.headers.host != route.$domain)
                 return false;
@@ -704,7 +704,7 @@ class Router extends Macroable.extend(RouterContract) {
      * @param {any} HttpResponse
      * @returns {any}
      */
-    bindToResponse(HttpResponse) {
+    bindToResponse(HttpResponse: any) {
         let self = this;
 
         HttpResponse.prototype.route = function (name, params) {
@@ -718,7 +718,7 @@ class Router extends Macroable.extend(RouterContract) {
      * @param {any} method
      * @returns {any}
      */
-    __get(target, method) {
+    __get(target: Record<string, any>, method: string) {
         return this.make(new GroupRoute, method);
     }
 

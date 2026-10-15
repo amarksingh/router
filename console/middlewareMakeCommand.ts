@@ -37,7 +37,7 @@ class MiddlewareMakeCommand extends GeneratorCommand {
      * @param {any} stub
      * @returns {any}
      */
-    resolveStubPath($stub) {
+    resolveStubPath($stub: any) {
         let $customPath = this.$app.basePath(trim($stub, '/'))
         return this.$file.exists($customPath).then($exists => ($exists ? $customPath : path.join(__dirname, $stub)))
     }
@@ -48,7 +48,7 @@ class MiddlewareMakeCommand extends GeneratorCommand {
      * @param {any} rootNamespace
      * @returns {any}
      */
-    getDefaultNamespace($rootNamespace) {
+    getDefaultNamespace($rootNamespace: any) {
         return path.join($rootNamespace, 'app', 'http', 'middleware');
     }
 

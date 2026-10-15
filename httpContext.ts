@@ -9,7 +9,7 @@ class HttpRouterContext extends Macroable {
      * @param {any} next
      * @returns {any}
      */
-    constructor(request, response, next) {
+    constructor(request: any, response: any, next: Function) {
         super()
         Object.defineProperty(this, 'request', {
             value: request,

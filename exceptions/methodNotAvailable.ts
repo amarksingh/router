@@ -5,7 +5,7 @@ class MethodNotAvailable extends Error {
      * @param {any} message
      * @returns {any}
      */
-    constructor(message) {
+    constructor(message: string) {
         super();
         this.name = this.constructor.name;
         this.message = message;

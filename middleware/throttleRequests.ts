@@ -42,7 +42,7 @@ class ThrottleRequests extends InteractsWithTime {
      * @param {any} prefix
      * @returns {any}
      */
-    constructor($maxAttempts = 60, $decayMinutes = 1, $prefix = '') {
+    constructor($maxAttempts: number = 60, $decayMinutes: number = 1, $prefix: string = '') {
         super()
         this.$maxAttempts = $maxAttempts;
         this.$decayMinutes = $decayMinutes;
@@ -57,7 +57,7 @@ class ThrottleRequests extends InteractsWithTime {
      * @param {any} name
      * @returns {any}
      */
-    static using($name) {
+    static using($name: string) {
         return get_class_name(this) + ':' + $name;
     }
 
@@ -70,7 +70,7 @@ class ThrottleRequests extends InteractsWithTime {
      * @param {any} prefix
      * @returns {any}
      */
-    static with($maxAttempts = 60, $decayMinutes = 1, $prefix = '') {
+    static with($maxAttempts: number = 60, $decayMinutes: number = 1, $prefix: string = '') {
         const args = [...arguments];
         args[0] = args[0] || $maxAttempts;
         args[1] = args[1] || $decayMinutes;
@@ -87,7 +87,7 @@ class ThrottleRequests extends InteractsWithTime {
      * @param {any} next }
      * @returns {any}
      */
-    async handle({ request, response, next }) {
+    async handle({ request, response, next }: Record<string, any>) {
         const $limiter = is_string(this.$maxAttempts) ? this.$limiter.limiter(this.$maxAttempts) : null;
         if (
             !is_null($limiter)) {
@@ -119,7 +119,7 @@ class ThrottleRequests extends InteractsWithTime {
      * @param {any} limiter
      * @returns {any}
      */
-    handleRequestUsingNamedLimiter(request, response, next, $limiterName, $limiter) {
+    handleRequestUsingNamedLimiter(request: any, response: any, next: Function, $limiterName: any, $limiter: any) {
         const $limiterResponse = $limiter(request);
 
         if ($limiterResponse instanceof Response) {
@@ -154,7 +154,7 @@ class ThrottleRequests extends InteractsWithTime {
      * @param {any} limits
      * @returns {any}
      */
-    async handleRequest(request, response, next, $limits = []) {
+    async handleRequest(request: any, response: any, next: Function, $limits: any[] = []) {
         for (let $limit of $limits) {
             if (await this.$limiter.tooManyAttempts($limit.key, $limit.maxAttempts)) {
                 return next(await this.buildException(request, $limit.key, $limit.maxAttempts, $limit.responseCallback));
@@ -182,7 +182,7 @@ class ThrottleRequests extends InteractsWithTime {
      * @param {any} maxAttempts
      * @returns {any}
      */
-    async resolveMaxAttempts(request, $maxAttempts = '') {
+    async resolveMaxAttempts(request: any, $maxAttempts: string = '') {
         const $user = await request.user();
         if (str_contains($maxAttempts, '|')) {
             $maxAttempts = $maxAttempts.split('|', 2)[$user ? 1 : 0];
@@ -202,7 +202,7 @@ class ThrottleRequests extends InteractsWithTime {
      * @param {any} request
      * @returns {any}
      */
-    async resolveRequestSignature(request) {
+    async resolveRequestSignature(request: any) {
         const $domain = request.hostname();
         const $user = await request.user()
         if ($user) {
@@ -224,7 +224,7 @@ class ThrottleRequests extends InteractsWithTime {
      * @param {any} responseCallback
      * @returns {any}
      */
-    async buildException(request, $key, $maxAttempts, responseCallback = null) {
+    async buildException(request: any, $key: string, $maxAttempts: any, responseCallback: any = null) {
         const $retryAfter = await this.getTimeUntilNextRetry($key);
 
         const $headers = this.getHeaders(
@@ -244,7 +244,7 @@ class ThrottleRequests extends InteractsWithTime {
      * @param {any} key
      * @returns {any}
      */
-    getTimeUntilNextRetry($key) {
+    getTimeUntilNextRetry($key: string) {
         return this.$limiter.availableIn($key);
     }
 
@@ -257,7 +257,7 @@ class ThrottleRequests extends InteractsWithTime {
      * @param {any} retryAfter
      * @returns {any}
      */
-    addHeaders(response, $maxAttempts, $remainingAttempts, $retryAfter = null) {
+    addHeaders(response: any, $maxAttempts: any, $remainingAttempts: any, $retryAfter: any = null) {
         const headers = this.getHeaders($maxAttempts, $remainingAttempts, $retryAfter, response);
         for (let key in headers) {
             response.header(
@@ -280,7 +280,7 @@ class ThrottleRequests extends InteractsWithTime {
      * @param {any} response
      * @returns {any}
      */
-    getHeaders($maxAttempts, $remainingAttempts, $retryAfter = null, response = null) {
+    getHeaders($maxAttempts: any, $remainingAttempts: any, $retryAfter: any = null, response: any = null) {
         if (response &&
             !is_null(response.header('X-RateLimit-Remaining')) &&
             parseInt(response.header('X-RateLimit-Remaining')) <= parseInt($remainingAttempts)) {
@@ -309,7 +309,7 @@ class ThrottleRequests extends InteractsWithTime {
      * @param {any} retryAfter
      * @returns {any}
      */
-    calculateRemainingAttempts($key, $maxAttempts, $retryAfter = null) {
+    calculateRemainingAttempts($key: string, $maxAttempts: any, $retryAfter: any = null) {
         return is_null($retryAfter) ? this.$limiter.retriesLeft($key, $maxAttempts) : 0;
     }
 
@@ -319,7 +319,7 @@ class ThrottleRequests extends InteractsWithTime {
      * @param {any} value
      * @returns {any}
      */
-    formatIdentifier($value) {
+    formatIdentifier($value: any) {
         return this.constructor.$shouldHashKeys ? sha1($value) : $value;
     }
 
@@ -331,7 +331,7 @@ class ThrottleRequests extends InteractsWithTime {
      * @param {any} shouldHashKeys
      * @returns {any}
      */
-    static shouldHashKeys($shouldHashKeys = true) {
+    static shouldHashKeys($shouldHashKeys: boolean = true) {
         this.$shouldHashKeys = $shouldHashKeys;
     }
 }

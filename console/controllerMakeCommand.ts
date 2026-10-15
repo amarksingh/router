@@ -56,7 +56,7 @@ class ControllerMakeCommand extends GeneratorCommand {
      * @param {any} stub
      * @returns {any}
      */
-    resolveStubPath($stub) {
+    resolveStubPath($stub: any) {
         let $customPath = this.$app.basePath(trim($stub, '/'))
         return this.$file.exists($customPath).then($exists => ($exists ? $customPath : path.join(__dirname, $stub)))
     }
@@ -67,7 +67,7 @@ class ControllerMakeCommand extends GeneratorCommand {
      * @param {any} rootNamespace
      * @returns {any}
      */
-    getDefaultNamespace($rootNamespace) {
+    getDefaultNamespace($rootNamespace: any) {
         return path.join($rootNamespace, 'app', 'http', 'controllers');
     }
 
@@ -78,7 +78,7 @@ class ControllerMakeCommand extends GeneratorCommand {
      * @param {any} name
      * @returns {any}
      */
-    async buildClass($name) {
+    async buildClass($name: string) {
 
         let $controllerNamespace = this.getNamespace($name);
         let $replace = {};
@@ -96,7 +96,7 @@ class ControllerMakeCommand extends GeneratorCommand {
      * @param {any} replace
      * @returns {any}
      */
-    async buildModelReplacements($replace) {
+    async buildModelReplacements($replace: any) {
         let $modelClass = this.parseModel(this.option('model'));
 
         if (!await this.$file.exists(!$modelClass.endsWith('.js') ? $modelClass+'.js' : $modelClass)) {
@@ -126,7 +126,7 @@ class ControllerMakeCommand extends GeneratorCommand {
      * @param {any} model
      * @returns {any}
      */
-    parseModel($model) {
+    parseModel($model: any) {
 
         if($model && typeof $model == 'boolean'){
             throw new InvalidArgumentException('Invalid model name')

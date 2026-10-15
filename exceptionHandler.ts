@@ -7,7 +7,7 @@ class ExceptionHandler {
      * @param {any} next
      * @returns {any}
      */
-    handle(error, { response }, next) {
+    handle(error: any, { response }: Record<string, any>, next: Function) {
         let status = 500;
         if (error instanceof Error) {
             status = error.status || 500;
@@ -31,7 +31,7 @@ class ExceptionHandler {
      * @param {any} next
      * @returns {any}
      */
-    terminate(error, { response }, next) {
+    terminate(error: any, { response }: Record<string, any>, next: Function) {
         console.error(error)
     }
 }
