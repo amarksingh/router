@@ -18,4 +18,4 @@ class MethodNotAvailable extends Error {
     }
 }
 
-export = MethodNotAvailable;
+export default MethodNotAvailable;

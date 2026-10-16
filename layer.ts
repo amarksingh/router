@@ -168,4 +168,4 @@ Layer.prototype.match = function (path: string | null | undefined): boolean {
 
 const ExportedLayer: LayerConstructor = Layer as unknown as LayerConstructor;
 
-export = ExportedLayer;
+export default ExportedLayer;

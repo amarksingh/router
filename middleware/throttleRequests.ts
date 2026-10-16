@@ -303,4 +303,4 @@ class ThrottleRequests extends InteractsWithTime {
     }
 }
 
-export = ThrottleRequests;
+export default ThrottleRequests;

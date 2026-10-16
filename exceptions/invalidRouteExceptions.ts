@@ -18,4 +18,4 @@ class InvalidRouteExceptions extends Error {
     }
 }
 
-export = InvalidRouteExceptions;
+export default InvalidRouteExceptions;

@@ -69,4 +69,4 @@ class RouteServiceProvider extends ServiceProvider {
     }
 }
 
-export = RouteServiceProvider;
+export default RouteServiceProvider;

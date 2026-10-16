@@ -52,4 +52,4 @@ class MiddlewareMakeCommand extends GeneratorCommand {
     }
 }
 
-export = MiddlewareMakeCommand;
+export default MiddlewareMakeCommand;

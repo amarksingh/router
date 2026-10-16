@@ -134,4 +134,4 @@ class ControllerMakeCommand extends GeneratorCommand {
     }
 }
 
-export = ControllerMakeCommand;
+export default ControllerMakeCommand;

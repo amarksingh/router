@@ -786,4 +786,4 @@ class Router extends (Macroable.extend(RouterContract) as any) implements IRoute
     public static GroupRoute: typeof GroupRoute = GroupRoute;
 }
 
-export = Router;
+export default Router;

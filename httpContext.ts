@@ -32,4 +32,4 @@ class HttpRouterContext extends Macroable {
     }
 }
 
-export = HttpRouterContext;
+export default HttpRouterContext;
