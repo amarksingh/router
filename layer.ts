@@ -54,22 +54,23 @@ interface LayerConstructor {
  * @param opts - Options for pathToRegexp compilation.
  */
 function Layer(this: any, stack: LayerStack, opts: LayerOptions = {}): LayerInstance {
-    if (!(this instanceof Layer)) {
+    const self: any = this;
+    if (!(self instanceof (Layer as any))) {
         return new (Layer as any)(stack, opts);
     }
 
-    this.handle = stack.handle;
-    this.terminate = stack.terminate;
-    this.$name = stack.name;
-    this.$domain = stack.domain;
-    this.$original = stack.url;
-    this.$methods = stack.methods;
-    this.$path = undefined;
-    this.$regexp = pathToRegexp(stack.url, (this.$keys = []), opts) as RegExpWithFlags;
-    this.$params = this.$keys as any;
-    this.$regexp.fast_star = stack.url === '*';
-    this.$regexp.fast_slash = stack.url === '/' && opts.end === false;
-    return this;
+    self.handle = stack.handle;
+    self.terminate = stack.terminate;
+    self.$name = stack.name;
+    self.$domain = stack.domain;
+    self.$original = stack.url;
+    self.$methods = stack.methods;
+    self.$path = undefined;
+    self.$regexp = pathToRegexp(stack.url, (self.$keys = []), opts) as RegExpWithFlags;
+    self.$params = self.$keys as any;
+    self.$regexp.fast_star = stack.url === '*';
+    self.$regexp.fast_slash = stack.url === '/' && opts.end === false;
+    return self;
 }
 
 /**

@@ -11,21 +11,27 @@ class ControllerMakeCommand extends GeneratorCommand {
     /**
      * The console command name.
      */
-    public $signature: string = 'make:controller';
+    get $signature(): string {
+        return 'make:controller';
+    }
 
     /**
      * The console command description.
      */
-    public $description: string = 'Create a new controller class';
+    get $description(): string {
+        return 'Create a new controller class';
+    }
 
     /**
      * The console command options.
      */
-    public $options: any[] = [
-        this.createOption('--force', 'Create the class even if the controller already exists'),
-        this.createOption('-m, --model [model]', 'Generate a resource controller for the given model.'),
-        this.createOption('-r, --resource', 'Generate a resource controller class.')
-    ];
+    get $options(): any[] {
+        return [
+            this.createOption('--force', 'Create the class even if the controller already exists'),
+            this.createOption('-m, --model [model]', 'Generate a resource controller for the given model.'),
+            this.createOption('-r, --resource', 'Generate a resource controller class.')
+        ];
+    }
 
     /**
      * The type of class being generated.
@@ -106,7 +112,7 @@ class ControllerMakeCommand extends GeneratorCommand {
                 });
             }
         }
-        $modelClass = $modelClass.replace(this.rootNamespace(), '~').replaceAll('\\', '/').trim('/');
+        $modelClass = trim($modelClass.replace(this.rootNamespace(), '~').replaceAll('\\', '/'), '/');
         return Object.assign($replace, {
             'DummyFullModelClass': $modelClass,
             '{{ namespacedModel }}': $modelClass,

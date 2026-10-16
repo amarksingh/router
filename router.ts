@@ -411,6 +411,18 @@ class GroupRoute extends Macroable {
  * Main HTTP Router class handling registration, resolution, middleware execution, and dispatching.
  */
 class Router extends (Macroable.extend(RouterContract) as any) implements IRouter {
+    public declare get: (uri: string, action?: any) => any;
+    public declare post: (uri: string, action?: any) => any;
+    public declare put: (uri: string, action?: any) => any;
+    public declare patch: (uri: string, action?: any) => any;
+    public declare delete: (uri: string, action?: any) => any;
+    public declare options: (uri: string, action?: any) => any;
+    public declare any: (uri: string, action?: any) => any;
+    public declare match: (methods: string[], uri: string, action?: any) => any;
+    public declare prefix: (prefix: string) => this;
+    public declare middleware: (...middlewares: any[]) => this;
+    public declare dispatch: (request: any, response: any) => Promise<any>;
+
     public $app: Record<string, any>;
     public httpContext: any;
     public [kMiddlewares]: { default: any[]; named: Record<string, any> };
@@ -718,7 +730,7 @@ class Router extends (Macroable.extend(RouterContract) as any) implements IRoute
         for (let i = 0; i < currentRouteParams.length; i++) {
             mParams[currentRouteParams[i]['name']] = params[i];
         }
-        return pathToRegexp.compile(currentRoute.$original, { encode: encodeURIComponent })(mParams, { validate: false });
+        return (pathToRegexp.compile(currentRoute.$original, { encode: encodeURIComponent }) as any)(mParams, { validate: false });
     }
 
     /**

@@ -2,8 +2,24 @@
   "name": "@ostro/router",
   "version": "1.0.5",
   "description": "Router module for OstroJS",
-  "main": "router.ts",
+  "main": "build/router.js",
+  "types": "build/router.d.ts",
+  "files": [
+    "build"
+  ],
+  "exports": {
+    ".": {
+      "types": "./build/router.d.ts",
+      "default": "./build/router.js"
+    },
+    "./*": {
+      "types": "./build/*.d.ts",
+      "default": "./build/*.js"
+    }
+  },
   "scripts": {
+    "build": "rm -rf build && npx tsc -p tsconfig.build.json",
+    "prepublishOnly": "npm run build",
     "test": "npx c8 npx jest"
   },
   "dependencies": {
