@@ -15,18 +15,18 @@ module.exports = {
         ]
     },
     "moduleNameMapper": {
-        "^@ostro/support/(.*)$": "<rootDir>/../support/$1",
-        "^@ostro/support$": "<rootDir>/../support",
-        "^@ostro/contracts/(.*)$": "<rootDir>/../contracts/$1",
-        "^@ostro/contracts$": "<rootDir>/../contracts",
+        "^@ostro/support/(.*)$": "<rootDir>/../support/src/$1",
+        "^@ostro/support$": "<rootDir>/../support/src",
+        "^@ostro/contracts/(.*)$": "<rootDir>/../contracts/src/$1",
+        "^@ostro/contracts$": "<rootDir>/../contracts/src",
         "^@ostro/console/(.*)$": "<rootDir>/../console/$1",
         "^@ostro/console$": "<rootDir>/../console",
-        "^@ostro/http/(.*)$": "<rootDir>/../http/$1",
-        "^@ostro/http$": "<rootDir>/../http",
+        "^@ostro/http/(.*)$": "<rootDir>/../http/src/$1",
+        "^@ostro/http$": "<rootDir>/../http/src/index",
         "^@ostro/cache/(.*)$": "<rootDir>/../cache/$1",
         "^@ostro/cache$": "<rootDir>/../cache",
-        "^@ostro/router/(.*)$": "<rootDir>/$1",
-        "^@ostro/router$": "<rootDir>/router"
+        "^@ostro/router/(.*)$": "<rootDir>/src/$1",
+        "^@ostro/router$": "<rootDir>/src/router"
     },
     "collectCoverage": true,
     "coverageDirectory": "coverage",
@@ -36,7 +36,7 @@ module.exports = {
         "clover"
     ],
     "collectCoverageFrom": [
-        "<rootDir>/**/*.ts",
+        "<rootDir>/src/**/*.ts",
         "!<rootDir>/node_modules/**",
         "!<rootDir>/test/**",
         "!<rootDir>/coverage/**",

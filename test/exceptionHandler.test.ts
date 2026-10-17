@@ -1,4 +1,4 @@
-import ExceptionHandler from '../exceptionHandler';
+import ExceptionHandler from '../src/exceptionHandler';
 
 describe('ExceptionHandler', () => {
     let originalEnv;

@@ -1,5 +1,5 @@
-import RouteServiceProvider from '../routeServiceProvider';
-import Router from '../router';
+import RouteServiceProvider from '../src/routeServiceProvider';
+import Router from '../src/router';
 
 describe('RouteServiceProvider', () => {
     test('registers router singleton and boots service provider', () => {

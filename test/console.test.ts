@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs';
-import ControllerMakeCommand from '../console/controllerMakeCommand';
-import MiddlewareMakeCommand from '../console/middlewareMakeCommand';
+import ControllerMakeCommand from '../src/console/controllerMakeCommand';
+import MiddlewareMakeCommand from '../src/console/middlewareMakeCommand';
 import InvalidArgumentException from '@ostro/support/exceptions/invalidArgumentException';
 
 describe('Console Make Commands', () => {

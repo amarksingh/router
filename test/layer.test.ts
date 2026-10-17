@@ -1,4 +1,4 @@
-import Layer from '../layer';
+import Layer from '../src/layer';
 
 describe('Layer', () => {
     test('instantiates without new keyword', () => {

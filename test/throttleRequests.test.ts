@@ -1,4 +1,4 @@
-import ThrottleRequests from '../middleware/throttleRequests';
+import ThrottleRequests from '../src/middleware/throttleRequests';
 import ThrottleRequestsException from '@ostro/http/exception/throttleRequestsException';
 import HttpException from '@ostro/http/exception/httpException';
 import Unlimited from '@ostro/cache/rateLimiting/unlimited';

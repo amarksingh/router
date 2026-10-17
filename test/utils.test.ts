@@ -1,4 +1,4 @@
-import { compose, composeWith, decode_param, urlNormalize } from '../utils';
+import { compose, composeWith, decode_param, urlNormalize } from '../src/utils';
 
 describe('Router Utils', () => {
     describe('decode_param', () => {

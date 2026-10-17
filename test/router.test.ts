@@ -1,7 +1,7 @@
-import Router from '../router';
+import Router from '../src/router';
 import PageNotFoundException from '@ostro/support/exceptions/pageNotFoundException';
 import MethodNotAvailable from '@ostro/support/exceptions/methodNotAvailable';
-import InvalidRouteExceptions from '../exceptions/invalidRouteExceptions';
+import InvalidRouteExceptions from '../src/exceptions/invalidRouteExceptions';
 import InvalidArgumentException from '@ostro/support/exceptions/invalidArgumentException';
 import path from 'path';
 

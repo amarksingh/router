@@ -1,6 +1,6 @@
-import MethodNotAvailable from '../exceptions/methodNotAvailable';
-import InvalidRouteExceptions from '../exceptions/invalidRouteExceptions';
-import Controller from '../controller';
+import MethodNotAvailable from '../src/exceptions/methodNotAvailable';
+import InvalidRouteExceptions from '../src/exceptions/invalidRouteExceptions';
+import Controller from '../src/controller';
 
 describe('Exceptions & Base Controller', () => {
     test('MethodNotAvailable has proper properties', () => {

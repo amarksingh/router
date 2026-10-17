@@ -1,4 +1,4 @@
-import HttpRouterContext from '../httpContext';
+import HttpRouterContext from '../src/httpContext';
 
 describe('HttpRouterContext', () => {
     test('defines non-writable enumerable request and response', () => {

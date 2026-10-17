@@ -1,4 +1,4 @@
-import View from '../viewController';
+import View from '../src/viewController';
 
 describe('ViewController', () => {
     test('instantiates with defaults and renders view on response', () => {
