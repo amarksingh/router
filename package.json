@@ -23,8 +23,11 @@
     "test": "npx c8 npx jest"
   },
   "dependencies": {
-    "@ostro/support": "^2.0.0-alpha.1",
+    "@ostro/cache": "^2.0.0-alpha.1",
+    "@ostro/console": "^2.0.0-alpha.1",
     "@ostro/contracts": "^2.0.0-alpha.1",
+    "@ostro/http": "^2.0.0-alpha.1",
+    "@ostro/support": "^2.0.0-alpha.1",
     "array-flatten": "^3.0.0",
     "lodash.difference": "^4.5.0",
     "path-to-regexp": "^6.2.0"

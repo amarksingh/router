@@ -798,6 +798,7 @@ describe('Router & Route & GroupRoute', () => {
             }
         }
 
+
         router.name('dashboard').get('/dashboard', () => {});
         router.handle();
 
@@ -806,6 +807,76 @@ describe('Router & Route & GroupRoute', () => {
         res.route('dashboard');
 
         expect(res.redirectedTo).toBe('/dashboard');
+    });
+
+    test('layerHandler skips next() when __viewPromise is set (async response scenario)', async () => {
+        // Simulate a route that sets __viewPromise on the response (like view() does)
+        // but where headersSent is still false (e.g. async session save defers end())
+        let nextCalledAfterView = false;
+        let viewRendered = false;
+        let resolveViewPromise!: () => void;
+        const controlledViewPromise = new Promise<void>((res) => {
+            resolveViewPromise = res;
+        });
+
+        router.get('/view-route', (ctx: any) => {
+            ctx.response.__viewPromise = controlledViewPromise;
+        });
+
+        const handler = router.handle();
+        const req = {
+            url: '/view-route',
+            method: 'GET',
+            headers: { host: 'localhost' }
+        };
+        const res: Record<string, any> = { headersSent: false };
+
+        // Fire handler but do NOT await — it will suspend internally at await __viewPromise
+        handler(req, res, () => {
+            nextCalledAfterView = true;
+        });
+
+        // Give handler one tick to start and reach `await __viewPromise`
+        await new Promise<void>((r) => setImmediate(r));
+
+        // Resolve viewPromise — simulates view render completing
+        resolveViewPromise();
+        viewRendered = true;
+
+        // Flush microtask + event loop ticks so the handler can finish
+        await new Promise<void>((r) => setImmediate(r));
+        await new Promise<void>((r) => setImmediate(r));
+
+        // next() must NOT have been called since __viewPromise was set
+        expect(nextCalledAfterView).toBe(false);
+        expect(viewRendered).toBe(true);
+    });
+
+    test('layerHandler calls next() when no view and headersSent is false', async () => {
+        // Route that does nothing - no __viewPromise, no headersSent
+        // next() MUST be called so finalhandler can run
+        let nextInvoked = false;
+
+        router.get('/no-response-route', (_ctx) => {
+            // intentionally does nothing
+        });
+
+        const handler = router.handle();
+        const req = {
+            url: '/no-response-route',
+            method: 'GET',
+            headers: { host: 'localhost' }
+        };
+        const res = { headersSent: false };
+
+        await new Promise<void>((resolve) => {
+            handler(req, res, () => {
+                nextInvoked = true;
+                resolve();
+            });
+        });
+
+        expect(nextInvoked).toBe(true);
     });
 });
 

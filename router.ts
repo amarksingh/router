@@ -44,12 +44,16 @@ interface RouteStack {
 
 function resolveModule(modPath: string): any {
     let mod: any;
+    let target = modPath;
+    if (typeof target === 'string' && target.startsWith('~/')) {
+        target = path.resolve(process.cwd(), target.slice(2));
+    }
     try {
-        mod = require(modPath);
+        mod = require(target);
     } catch (err: any) {
         if (err && err.code === 'MODULE_NOT_FOUND') {
             const cwd: string = process.cwd();
-            const rel: string = path.relative(cwd, modPath);
+            const rel: string = path.relative(cwd, target);
             if (!rel.startsWith('build' + path.sep)) {
                 const buildCandidate: string = path.join(cwd, 'build', rel);
                 try {
@@ -689,6 +693,9 @@ class Router extends (Macroable.extend(RouterContract) as any) implements IRoute
             });
             if (layer) {
                 await layer.handle_request(ctx, next);
+                if (ctx.response && ctx.response.__viewPromise) {
+                    await ctx.response.__viewPromise;
+                }
             } else {
                 return next(new PageNotFoundException());
             }
@@ -705,7 +712,9 @@ class Router extends (Macroable.extend(RouterContract) as any) implements IRoute
                 };
             }
             defaultTerminateMiddleware[layer.$regexp].terminate(ctx, defaultTerminateMiddleware[layer.$regexp].error);
-            return next();
+            if (!ctx.response || (!ctx.response.headersSent && !ctx.response.__viewPromise)) {
+                return next();
+            }
         });
         const exceptionHandler: ExceptionHandler = new ExceptionHandler();
         let exceptionHandle: Function = exceptionHandler.handle.bind(exceptionHandler);

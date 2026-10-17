@@ -116,18 +116,45 @@ function generate(handlers: any[]): Function {
                 return done(err);
             }
 
+            let nextCalled = false;
+            let nextResolve: (val?: any) => void = () => {};
+            const nextPromise = new Promise((resolve) => {
+                nextResolve = resolve;
+            });
+
             httpContext.next = (err: any) => {
-                return dispatch(pos + 1, err);
+                nextCalled = true;
+                const p = dispatch(pos + 1, err);
+                nextResolve(p);
+                return p;
             };
+
+            if (httpContext && typeof httpContext.setCurrentNext === 'function') {
+                httpContext.setCurrentNext(httpContext.next);
+            }
 
             try {
                 if (handler.length === 3) {
                     if (err) {
-                        return Promise.resolve(handler(err, httpContext, httpContext.next)).catch(httpContext.next);
+                        const res = handler(err, httpContext, httpContext.next);
+                        if (res && typeof res.then === 'function') {
+                            return res.catch(httpContext.next);
+                        }
+                        if (pos < stack.length - 1) {
+                            return nextPromise;
+                        }
+                        return res;
                     }
                 } else {
                     if (!err) {
-                        return Promise.resolve(handler(httpContext, httpContext.next)).catch(httpContext.next);
+                        const res = handler(httpContext, httpContext.next);
+                        if (res && typeof res.then === 'function') {
+                            return res.catch(httpContext.next);
+                        }
+                        if (pos < stack.length - 1) {
+                            return nextPromise;
+                        }
+                        return res;
                     }
                 }
             } catch (e: any) {

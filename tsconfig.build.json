@@ -11,14 +11,13 @@
     "skipLibCheck": true,
     "noImplicitAny": false,
     "strict": false,
+    "types": [
+      "node"
+    ],
     "typeRoots": [
       "./node_modules/@types",
       "../node_modules/@types",
-      "../../node_modules/@types",
-      "/Users/amarkumarsingh/.nvm/versions/node/v24.12.0/lib/node_modules/@types"
-    ],
-    "types": [
-      "node"
+      "../../node_modules/@types"
     ]
   },
   "include": [
