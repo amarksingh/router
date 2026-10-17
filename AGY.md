@@ -1,7 +1,7 @@
 # @ostro/router — Antigravity AI Architecture & Knowledge Base
 
 > **Package Name**: `@ostro/router`
-> **Version**: `1.0.5`
+> **Version**: `2.0.0-alpha.1`
 > **Role in Ecosystem**: Modular Core Framework Library
 
 ---
