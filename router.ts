@@ -42,6 +42,31 @@ interface RouteStack {
     [key: string]: any;
 }
 
+function resolveModule(modPath: string): any {
+    let mod: any;
+    try {
+        mod = require(modPath);
+    } catch (err: any) {
+        if (err && err.code === 'MODULE_NOT_FOUND') {
+            const cwd: string = process.cwd();
+            const rel: string = path.relative(cwd, modPath);
+            if (!rel.startsWith('build' + path.sep)) {
+                const buildCandidate: string = path.join(cwd, 'build', rel);
+                try {
+                    mod = require(buildCandidate);
+                } catch {
+                    throw err;
+                }
+            } else {
+                throw err;
+            }
+        } else {
+            throw err;
+        }
+    }
+    return (mod && (mod.__esModule || mod.default) && mod.default) ? mod.default : mod;
+}
+
 /**
  * Route definition class representing an individual route being configured.
  */
@@ -302,7 +327,7 @@ class Route {
      */
     public group(opt: any = {}, callback?: Function): void {
         if (typeof opt === 'string') {
-            callback = require(opt);
+            callback = resolveModule(opt);
             opt = {};
         } else if (typeof opt === 'function') {
             callback = opt;
@@ -382,7 +407,7 @@ class GroupRoute extends Macroable {
      */
     public group(opt: any, callback?: Function): void {
         if (typeof opt === 'string') {
-            callback = require(opt);
+            callback = resolveModule(opt);
             opt = {};
         } else if (typeof opt === 'function') {
             callback = opt;
@@ -529,7 +554,7 @@ class Router extends (Macroable.extend(RouterContract) as any) implements IRoute
             const [controller, callback] = stack.handle.split('::');
             const controllerPath: string = path.normalize(path.join(path.resolve(stack.namespace), controller));
             if (!controllers[controllerPath]) {
-                let clazz: any = require(controllerPath);
+                let clazz: any = resolveModule(controllerPath);
                 if (IsClass(clazz)) {
                     clazz.prototype.$app = this.$app;
                     clazz = new clazz(stack.defaults);
@@ -605,7 +630,7 @@ class Router extends (Macroable.extend(RouterContract) as any) implements IRoute
         if (this[kMiddlewares]['default'] instanceof Array) {
             return this[kMiddlewares]['default'].map((middleware: any) => {
                 if (typeof middleware === 'string') {
-                    middleware = require(path.normalize(middleware));
+                    middleware = resolveModule(path.normalize(middleware));
                 }
                 if (IsClass(middleware)) {
                     if (middlewares[middleware]) {
