@@ -1,6 +1,6 @@
 const tsJestPath = "/Users/amarkumarsingh/.nvm/versions/node/v24.12.0/lib/node_modules/ts-jest";
 
-module.exports = {
+export default {
     "testEnvironment": "node",
     "testMatch": [
         "**/test/**/*.test.ts",
@@ -19,12 +19,12 @@ module.exports = {
         "^@ostro/support$": "<rootDir>/../support/src",
         "^@ostro/contracts/(.*)$": "<rootDir>/../contracts/src/$1",
         "^@ostro/contracts$": "<rootDir>/../contracts/src",
-        "^@ostro/console/(.*)$": "<rootDir>/../console/$1",
-        "^@ostro/console$": "<rootDir>/../console",
+        "^@ostro/console/(.*)$": "<rootDir>/../console/src/$1",
+        "^@ostro/console$": "<rootDir>/../console/src/application",
         "^@ostro/http/(.*)$": "<rootDir>/../http/src/$1",
         "^@ostro/http$": "<rootDir>/../http/src/index",
-        "^@ostro/cache/(.*)$": "<rootDir>/../cache/$1",
-        "^@ostro/cache$": "<rootDir>/../cache",
+        "^@ostro/cache/(.*)$": "<rootDir>/../cache/src/$1",
+        "^@ostro/cache$": "<rootDir>/../cache/src",
         "^@ostro/router/(.*)$": "<rootDir>/src/$1",
         "^@ostro/router$": "<rootDir>/src/router"
     },
@@ -40,8 +40,7 @@ module.exports = {
         "!<rootDir>/node_modules/**",
         "!<rootDir>/test/**",
         "!<rootDir>/coverage/**",
-        "!<rootDir>/build/**",
-        "!<rootDir>/jest.config.js"
+        "!<rootDir>/build/**"
     ],
     "modulePathIgnorePatterns": [
         "<rootDir>/build/"
