@@ -9,14 +9,14 @@ class MiddlewareMakeCommand extends GeneratorCommand {
     /**
      * The console command name.
      */
-    get $signature(): string {
+    public get $signature(): string {
         return 'make:middleware';
     }
 
     /**
      * The console command description.
      */
-    get $description(): string {
+    public get $description(): string {
         return 'Create a new middleware class';
     }
 

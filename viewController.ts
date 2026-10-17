@@ -30,7 +30,7 @@ class View {
      *
      * @param context - Context containing request, response, and next.
      */
-    handle({ request, response, next }: Record<string, any>): void {
+    public handle({ request, response, next }: Record<string, any>): void {
         response.view(this.$view, this.$data, this.$status);
     }
 }

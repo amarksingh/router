@@ -11,21 +11,21 @@ class ControllerMakeCommand extends GeneratorCommand {
     /**
      * The console command name.
      */
-    get $signature(): string {
+    public get $signature(): string {
         return 'make:controller';
     }
 
     /**
      * The console command description.
      */
-    get $description(): string {
+    public get $description(): string {
         return 'Create a new controller class';
     }
 
     /**
      * The console command options.
      */
-    get $options(): any[] {
+    public get $options(): any[] {
         return [
             this.createOption('--force', 'Create the class even if the controller already exists'),
             this.createOption('-m, --model [model]', 'Generate a resource controller for the given model.'),
